@@ -1,0 +1,34 @@
+name: cometchat_calls_sample_app_flutter
+description: A sample app demonstrating the CometChat Calls SDK for Flutter.
+
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cometchat_calls_sdk:
+    hosted:
+      url: https://dart.cloudsmith.io/cometchat/cometchat/
+    version: 5.0.0-beta.2
+
+  permission_handler: ^11.3.1
+  http: ^1.2.1
+  shared_preferences: ^2.5.3
+  uuid: ^4.4.0
+  flutter_svg: ^2.0.10+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints:
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
