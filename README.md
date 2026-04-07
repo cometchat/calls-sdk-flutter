@@ -29,7 +29,7 @@ dependencies:
   cometchat_calls_sdk:
     hosted:
       url: https://dart.cloudsmith.io/cometchat/cometchat/
-    version: 5.0.0-beta.2
+    version: 5.0.0-beta.3
 ```
 
 For the full setup guide, refer to our [official documentation](https://www.cometchat.com/docs/calls/flutter/overview).
