@@ -52,7 +52,7 @@ Each skill has a `description` field in its YAML frontmatter that lists trigger 
 
 ## Compatibility
 
-- CometChat Calls SDK v5 (5.0.0+)
+- CometChat Calls SDK v5 (5.0.2+)
 - CometChat Chat SDK v4 (4.0.+) — required for ringing and VoIP
 - Dart 3.0+, Flutter 3.10+
 - Android minSdk 26, iOS 13.0+

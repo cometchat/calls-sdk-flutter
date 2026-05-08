@@ -28,7 +28,7 @@ import 'package:cometchat_calls_sdk/cometchat_calls_sdk.dart';
 
 ```yaml
 dependencies:
-  cometchat_calls_sdk: ^5.0.0
+  cometchat_calls_sdk: ^5.0.2
 ```
 
 Then run `flutter pub get`.

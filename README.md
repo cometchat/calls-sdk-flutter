@@ -26,7 +26,7 @@ Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cometchat_calls_sdk: ^5.0.0
+  cometchat_calls_sdk: ^5.0.2
 ```
 
 For the full setup guide, refer to our [official documentation](https://www.cometchat.com/docs/calls/flutter/overview).
