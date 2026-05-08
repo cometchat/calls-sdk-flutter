@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Set up CometChat Calls SDK v5 for Flutter. Use when adding SDK dependency from Cloudsmith, configuring CallAppSettings, CometChatCalls.init, platform permissions. Triggers on "setup calls sdk", "add cometchat dependency", "initialize calls", "cloudsmith", "pubspec".
+description: Set up CometChat Calls SDK v5 for Flutter. Use when adding SDK dependency, configuring CallAppSettings, CometChatCalls.init, platform permissions. Triggers on "setup calls sdk", "add cometchat dependency", "initialize calls", "pubspec".
 inclusion: manual
 ---
 
@@ -8,7 +8,7 @@ inclusion: manual
 
 ## Overview
 
-Install and initialize the CometChat Calls SDK v5 in a Flutter project. Covers dependency setup from Cloudsmith, platform permissions, and `CometChatCalls.init()`.
+Install and initialize the CometChat Calls SDK v5 in a Flutter project. Covers dependency setup, platform permissions, and `CometChatCalls.init()`.
 
 ## Prerequisites
 
@@ -28,10 +28,7 @@ import 'package:cometchat_calls_sdk/cometchat_calls_sdk.dart';
 
 ```yaml
 dependencies:
-  cometchat_calls_sdk:
-    hosted:
-      url: https://dart.cloudsmith.io/cometchat/cometchat/
-    version: 5.0.0-beta.4
+  cometchat_calls_sdk: ^5.0.0
 ```
 
 Then run `flutter pub get`.
@@ -152,7 +149,7 @@ CometChatCalls.logout(
 - Request camera and microphone permissions at runtime using `permission_handler` package
 - Call `CometChatCalls.init()` before any other SDK method
 - If using both Chat SDK and Calls SDK, initialize both separately
-- The SDK is hosted on Cloudsmith, not pub.dev — use the `hosted` URL in pubspec
+- The SDK is available on pub.dev
 - Android requires `minSdk 26` or higher
 
 ## Sample App Reference

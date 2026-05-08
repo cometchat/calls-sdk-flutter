@@ -18,7 +18,7 @@ cp -r skills/ /path/to/your/project/skills/
 
 | Skill | Triggers On |
 |-------|-------------|
-| `setup` | SDK dependency, Cloudsmith hosted URL, CallAppSettings, CometChatCalls.init, permissions |
+| `setup` | SDK dependency, CallAppSettings, CometChatCalls.init, permissions |
 | `join-session` | CometChatCalls.joinSession, SessionSettingsBuilder, Widget container |
 | `ringing-integration` | Dual SDK (Chat + Calls), initiateCall, accept/reject/cancel, incoming/outgoing |
 | `session-settings` | All SessionSettingsBuilder options: layouts, session type, audio mode, hide buttons |
@@ -52,9 +52,9 @@ Each skill has a `description` field in its YAML frontmatter that lists trigger 
 
 ## Compatibility
 
-- CometChat Calls SDK v5 (5.0.0-beta.4+)
+- CometChat Calls SDK v5 (5.0.0+)
 - CometChat Chat SDK v4 (4.0.+) — required for ringing and VoIP
 - Dart 3.0+, Flutter 3.10+
 - Android minSdk 26, iOS 13.0+
-- Hosted on Cloudsmith: `https://dart.cloudsmith.io/cometchat/cometchat/`
+- Available on pub.dev: https://pub.dev/packages/cometchat_calls_sdk
 - Works with: Kiro, Claude Code, Cursor, Copilot, and other AI coding assistants that support the skills ecosystem

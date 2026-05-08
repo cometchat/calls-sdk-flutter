@@ -20,25 +20,11 @@ The CometChat Calls SDK enables real-time voice and video calling capabilities i
 
 ## Installation
 
-### pub.dev (Coming Soon)
-
-Once the SDK is published to pub.dev, add the dependency to your `pubspec.yaml`:
+Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
   cometchat_calls_sdk: ^5.0.0
-```
-
-### Cloudsmith (Current Beta)
-
-For the current beta release, add the Cloudsmith hosted repository and dependency to your `pubspec.yaml`:
-
-```yaml
-dependencies:
-  cometchat_calls_sdk:
-    hosted:
-      url: https://dart.cloudsmith.io/cometchat/cometchat/
-    version: 5.0.0-beta.4
 ```
 
 Then run:

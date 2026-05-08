@@ -22,14 +22,11 @@ To set up the CometChat Calls SDK and utilize CometChat for your calling functio
 
 ## 📦 Installation
 
-Add the hosted repository and dependency to your `pubspec.yaml`:
+Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cometchat_calls_sdk:
-    hosted:
-      url: https://dart.cloudsmith.io/cometchat/cometchat/
-    version: 5.0.0-beta.4
+  cometchat_calls_sdk: ^5.0.0
 ```
 
 For the full setup guide, refer to our [official documentation](https://www.cometchat.com/docs/calls/flutter/overview).

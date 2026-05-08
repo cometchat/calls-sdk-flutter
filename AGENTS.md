@@ -7,7 +7,7 @@ This repository contains the CometChat Calls SDK sample apps for Flutter. When w
 Load the relevant skill based on the task:
 
 ### Core
-- `skills/setup/SKILL.md` — SDK dependency from Cloudsmith, CallAppSettings, CometChatCalls.init, permissions
+- `skills/setup/SKILL.md` — SDK dependency, CallAppSettings, CometChatCalls.init, permissions
 - `skills/join-session/SKILL.md` — CometChatCalls.joinSession, SessionSettingsBuilder, Widget container
 - `skills/ringing-integration/SKILL.md` — Dual SDK (Chat + Calls), initiateCall, accept/reject/cancel
 - `skills/session-settings/SKILL.md` — All SessionSettingsBuilder options: layouts, session type, audio mode, hide buttons
@@ -31,7 +31,7 @@ Load the relevant skill based on the task:
 
 ## Key Rules
 
-- SDK hosted on Cloudsmith: `https://dart.cloudsmith.io/cometchat/cometchat/`
+- SDK available on pub.dev: https://pub.dev/packages/cometchat_calls_sdk
 - `SessionType.audio` / `SessionType.video`
 - `LayoutType.tile` / `LayoutType.sidebar` / `LayoutType.spotlight`
 - `AudioMode.speaker` / `AudioMode.earpiece` / `AudioMode.bluetooth` / `AudioMode.headphones`
