@@ -26,7 +26,7 @@ Sign up for a [CometChat](https://app.cometchat.com/) account to obtain your app
 **iOS**
 - Xcode (latest stable version)
 - CocoaPods
-- An iOS device or simulator with iOS 13.0 or above
+- An iOS device or simulator with iOS 15.1 or above
 
 
 ## Installation
