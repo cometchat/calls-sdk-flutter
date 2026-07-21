@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cometchat_calls_sdk: ^5.0.3
+  cometchat_calls_sdk: ^5.0.4
 
   permission_handler: ^11.3.1
   http: ^1.2.1

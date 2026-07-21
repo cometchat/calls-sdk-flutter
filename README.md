@@ -26,8 +26,19 @@ Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cometchat_calls_sdk: ^5.0.3
+  cometchat_calls_sdk: ^5.0.4
 ```
+
+### Requirements
+
+| Platform | Minimum |
+|----------|---------|
+| iOS      | 15.1    |
+| Android  | API 26 (Android 8.0) |
+
+> **iOS 15.1 is required from 5.0.4 onward** (previously 13.0). The underlying
+> native Calls SDK ships an XCFramework that requires 15.1, so a lower
+> deployment target in your `Podfile` will resolve but then fail to build.
 
 For the full setup guide, refer to our [official documentation](https://www.cometchat.com/docs/calls/flutter/overview).
 

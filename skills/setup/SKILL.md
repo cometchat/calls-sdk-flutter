@@ -13,7 +13,7 @@ Install and initialize the CometChat Calls SDK v5 in a Flutter project. Covers d
 ## Prerequisites
 
 - Flutter 3.10+, Dart 3.0+
-- Android minSdk 26, iOS 13.0+
+- Android minSdk 26, iOS 15.1+
 - App ID and Region from CometChat Dashboard
 
 ## Key Imports
@@ -28,7 +28,7 @@ import 'package:cometchat_calls_sdk/cometchat_calls_sdk.dart';
 
 ```yaml
 dependencies:
-  cometchat_calls_sdk: ^5.0.2
+  cometchat_calls_sdk: ^5.0.4
 ```
 
 Then run `flutter pub get`.
@@ -68,7 +68,7 @@ In `ios/Runner/Info.plist`:
 In `ios/Podfile`, set minimum iOS version:
 
 ```ruby
-platform :ios, '13.0'
+platform :ios, '15.1'
 ```
 
 ### 4. Initialize SDK

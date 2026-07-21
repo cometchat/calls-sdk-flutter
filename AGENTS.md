@@ -39,5 +39,5 @@ Load the relevant skill based on the task:
 - `joinSession` returns a `Widget?` — embed in widget tree
 - `CallSession.getInstance()` for session controls after joining
 - Language: Dart 3.0+, Flutter 3.10+
-- Android minSdk 26, iOS 13.0+
+- Android minSdk 26, iOS 15.1+
 - Documentation: https://www.cometchat.com/docs/calls/flutter/overview

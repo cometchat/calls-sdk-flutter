@@ -52,9 +52,9 @@ Each skill has a `description` field in its YAML frontmatter that lists trigger 
 
 ## Compatibility
 
-- CometChat Calls SDK v5 (5.0.2+)
+- CometChat Calls SDK v5 (5.0.4+)
 - CometChat Chat SDK v4 (4.0.+) — required for ringing and VoIP
 - Dart 3.0+, Flutter 3.10+
-- Android minSdk 26, iOS 13.0+
+- Android minSdk 26, iOS 15.1+
 - Available on pub.dev: https://pub.dev/packages/cometchat_calls_sdk
 - Works with: Kiro, Claude Code, Cursor, Copilot, and other AI coding assistants that support the skills ecosystem

@@ -24,7 +24,7 @@ Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cometchat_calls_sdk: ^5.0.3
+  cometchat_calls_sdk: ^5.0.4
 ```
 
 Then run:
