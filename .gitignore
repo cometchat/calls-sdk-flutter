@@ -1,3 +1,12 @@
+# Secrets — this is a public repo.
+# Firebase config carries project ids and API keys; sample apps must ship
+# placeholder CometChat credentials and contributors supply their own locally.
+**/google-services.json
+**/GoogleService-Info.plist
+**/.env
+**/.env.*
+!**/.env.example
+
 # Flutter/Dart build artifacts
 .dart_tool/
 .packages
