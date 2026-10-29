@@ -23,7 +23,7 @@ Sign up for a [CometChat](https://app.cometchat.com/) account to obtain your app
 - Android device or emulator with API level 26+
 
 **iOS**
-- Xcode (latest stable version)
+- Xcode 26.1.1 or later
 - An iOS device or simulator with iOS 15.1 or above
 
 

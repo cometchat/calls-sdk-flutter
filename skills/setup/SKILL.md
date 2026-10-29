@@ -14,7 +14,7 @@ Install and initialize the CometChat Calls SDK v5 in a Flutter project. Covers d
 
 - Flutter 3.44 or later, where Swift Package Manager is on by default (older Flutter versions need it turned on for iOS); Dart 3.2+
 - Android minSdk 26 and Android Gradle Plugin 8.9.1+
-- iOS 15.1+, built with Swift Package Manager (on by default from Flutter 3.44)
+- iOS 15.1+, built with Swift Package Manager (on by default from Flutter 3.44) and Xcode 26.1.1 or later (the SDK's `connectivity_plus` 7 dependency uses the iOS 26 SDK)
 - App ID and Region from CometChat Dashboard
 
 ## Key Imports

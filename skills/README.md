@@ -56,6 +56,6 @@ Each skill has a `description` field in its YAML frontmatter that lists trigger 
 - The Chat SDK is not required: from 5.1 the Calls SDK rings calls itself. Apps that also use the Chat SDK v4 on iOS need `CometChatSDK` 4.1.3+
 - Flutter 3.44+ (Swift Package Manager on by default), Dart 3.2+
 - Android minSdk 26, Android Gradle Plugin 8.9.1+
-- iOS 15.1+, Swift Package Manager only (on by default from Flutter 3.44)
+- iOS 15.1+, Swift Package Manager only (on by default from Flutter 3.44), Xcode 26.1.1 or later
 - Available on pub.dev: https://pub.dev/packages/cometchat_calls_sdk
 - Works with: Kiro, Claude Code, Cursor, Copilot, and other AI coding assistants that support the skills ecosystem

@@ -33,7 +33,7 @@ dependencies:
 
 | Platform | Minimum |
 |----------|---------|
-| iOS      | 15.1, built with Swift Package Manager |
+| iOS      | 15.1, built with Swift Package Manager and Xcode 26.1.1 or later |
 | Android  | API 26 (Android 8.0), `compileSdk` 36, Android Gradle Plugin 8.9.1 |
 
 **iOS:** the plugin builds with Swift Package Manager only, since the native

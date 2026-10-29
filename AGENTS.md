@@ -42,5 +42,5 @@ Load the relevant skill based on the task:
 - Ringing (5.1): `CometChatCalls.initiateCall` / `connect` / `joinSession` / `endCall(status: EndCallStatus.*)` / `addIncomingCallListener`; no Chat SDK needed. `initiateCall`, `endCall` and the incoming-call APIs are Android and iOS only
 - Language: Dart 3.2+, Flutter 3.44+ (Swift Package Manager on by default for iOS)
 - Android minSdk 26, Android Gradle Plugin 8.9.1+; the app declares `com.cometchatcalls.cometchatcalls_plugin.services.OngoingCallService` in its manifest
-- iOS 15.1+, Swift Package Manager only (no Podfile / `pod install` for the Calls SDK)
+- iOS 15.1+, Swift Package Manager only (no Podfile / `pod install` for the Calls SDK), Xcode 26.1.1 or later
 - Documentation: https://www.cometchat.com/docs/calls/flutter/overview
