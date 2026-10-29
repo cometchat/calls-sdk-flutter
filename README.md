@@ -34,7 +34,7 @@ dependencies:
 | Platform | Minimum |
 |----------|---------|
 | iOS      | 15.1, built with Swift Package Manager |
-| Android  | API 26 (Android 8.0), Android Gradle Plugin 8.9.1 |
+| Android  | API 26 (Android 8.0), `compileSdk` 36, Android Gradle Plugin 8.9.1 |
 
 **iOS:** the plugin builds with Swift Package Manager only, since the native
 Calls SDK 5.1 is not on the CocoaPods trunk. It is on by default from Flutter
