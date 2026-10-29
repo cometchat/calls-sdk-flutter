@@ -24,7 +24,7 @@ Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cometchat_calls_sdk: ^5.0.4
+  cometchat_calls_sdk: ^5.1.0
 ```
 
 Then run:
@@ -32,6 +32,10 @@ Then run:
 ```bash
 flutter pub get
 ```
+
+iOS builds with Swift Package Manager (on by default from Flutter 3.44), and
+Android apps declare the plugin's ongoing call service to keep calls running in
+the background. See the [setup steps](../README.md#requirements).
 
 ## Help and Support
 

@@ -26,19 +26,34 @@ Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cometchat_calls_sdk: ^5.0.4
+  cometchat_calls_sdk: ^5.1.0
 ```
 
 ### Requirements
 
 | Platform | Minimum |
 |----------|---------|
-| iOS      | 15.1    |
-| Android  | API 26 (Android 8.0) |
+| iOS      | 15.1, built with Swift Package Manager |
+| Android  | API 26 (Android 8.0), Android Gradle Plugin 8.9.1 |
 
-> **iOS 15.1 is required from 5.0.4 onward** (previously 13.0). The underlying
-> native Calls SDK ships an XCFramework that requires 15.1, so a lower
-> deployment target in your `Podfile` will resolve but then fail to build.
+**iOS:** the plugin builds with Swift Package Manager only, since the native
+Calls SDK 5.1 is not on the CocoaPods trunk. It is on by default from Flutter
+3.44; on an older Flutter, or if your app turned it off, run
+`flutter config --enable-swift-package-manager`.
+
+**Android:** declare the plugin's ongoing call service in your app's
+`AndroidManifest.xml`, inside `<application>`. Without it, Android stops the
+microphone and camera when the app goes to the background:
+
+```xml
+<service
+    android:name="com.cometchatcalls.cometchatcalls_plugin.services.OngoingCallService"
+    android:exported="false"
+    android:foregroundServiceType="microphone|camera" />
+```
+
+Upgrading from 5.0.x? See the [5.1.0 changelog](sdk/CHANGELOG.md) for the
+breaking changes.
 
 For the full setup guide, refer to our [official documentation](https://www.cometchat.com/docs/calls/flutter/overview).
 
