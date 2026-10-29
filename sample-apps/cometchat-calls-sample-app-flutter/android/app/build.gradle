@@ -43,7 +43,7 @@ android {
     defaultConfig {
         applicationId "com.cometchat.calls.sampleapp.flutter"
         minSdkVersion 26
-        targetSdkVersion 34
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

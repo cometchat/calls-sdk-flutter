@@ -16,8 +16,7 @@ This is a reference application showcasing the integration of [CometChat's Flutt
 
 Sign up for a [CometChat](https://app.cometchat.com/) account to obtain your app credentials: _`App ID`_, _`Region`_, and _`Auth Key`_
 
-- **Flutter SDK** 3.10.0 or higher
-- **Dart SDK** 3.0.0 or higher
+- **Flutter SDK** 3.44 or later (Swift Package Manager is on by default)
 
 **Android**
 - Android Studio (latest stable version)
@@ -25,7 +24,6 @@ Sign up for a [CometChat](https://app.cometchat.com/) account to obtain your app
 
 **iOS**
 - Xcode (latest stable version)
-- CocoaPods
 - An iOS device or simulator with iOS 15.1 or above
 
 
@@ -38,19 +36,12 @@ Sign up for a [CometChat](https://app.cometchat.com/) account to obtain your app
 
 1. Change into the sample app's directory:
    ```sh
-   cd sample-apps/cometchat-calls-sample-app-flutter
+   cd calls-sdk-flutter/sample-apps/cometchat-calls-sample-app-flutter
    ```
 
 1. Install dependencies:
    ```sh
    flutter pub get
-   ```
-
-1. For iOS, install CocoaPods dependencies:
-   ```sh
-   cd ios
-   pod install
-   cd ..
    ```
 
 1. `[Optional]` Configure CometChat credentials:
