@@ -82,7 +82,7 @@ class _CallScreenState extends State<CallScreen>
     _isLeavingSession = true;
 
     try {
-      await _callSession?.leaveSession();
+      await _callSession?.leave();
     } catch (_) {
       // Best-effort leave
     }
@@ -105,6 +105,11 @@ class _CallScreenState extends State<CallScreen>
   }
 
   // --- SessionStatusListeners ---
+
+  // Fires for a session prepared with CometChatCalls.connect, before the
+  // join. This screen joins directly, so there is nothing to do here.
+  @override
+  void onConnected() {}
 
   @override
   void onSessionJoined() {

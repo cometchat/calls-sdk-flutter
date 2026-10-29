@@ -8,7 +8,7 @@ inclusion: manual
 
 ## Overview
 
-Enable in-call messaging so participants can send text messages during an active call session. The SDK provides a built-in chat button and unread count badge.
+Add in-call messaging to an active call session. The Calls SDK provides the chat button, its click event and an unread count badge; the chat UI and the messages themselves come from your app (for example, built on the CometChat Chat SDK).
 
 ## Key Imports
 
@@ -36,7 +36,7 @@ await session?.setChatButtonUnreadCount(5);
 ### Listen for Chat Button Click
 
 ```dart
-class MyButtonListener implements ButtonClickListeners {
+class MyButtonListener extends ButtonClickListeners {
   @override
   void onChatButtonClicked() {
     // Open your custom chat UI or handle the event
@@ -49,17 +49,29 @@ class MyButtonListener implements ButtonClickListeners {
 
 ```dart
 class CallScreenWithChat extends StatefulWidget {
+  const CallScreenWithChat({super.key, required this.callWidget});
+  final Widget callWidget;
+
   @override
   State<CallScreenWithChat> createState() => _CallScreenWithChatState();
 }
 
-class _CallScreenWithChatState extends State<CallScreenWithChat>
-    implements ButtonClickListeners {
+class _CallScreenWithChatState extends State<CallScreenWithChat> {
   bool _showChat = false;
+  late final _buttons = _ChatButtonListener(() {
+    setState(() => _showChat = !_showChat);
+  });
 
   @override
-  void onChatButtonClicked() {
-    setState(() => _showChat = !_showChat);
+  void initState() {
+    super.initState();
+    CallSession.getInstance()?.addButtonClickListener(_buttons);
+  }
+
+  @override
+  void dispose() {
+    CallSession.getInstance()?.removeButtonClickListener(_buttons);
+    super.dispose();
   }
 
   @override
@@ -67,7 +79,7 @@ class _CallScreenWithChatState extends State<CallScreenWithChat>
     return Scaffold(
       body: Stack(
         children: [
-          // Call widget here
+          widget.callWidget,
           if (_showChat)
             Positioned(
               bottom: 80,
@@ -75,7 +87,7 @@ class _CallScreenWithChatState extends State<CallScreenWithChat>
               left: 16,
               height: 300,
               child: Card(
-                child: YourChatWidget(sessionId: "..."),
+                child: YourChatWidget(sessionId: "..."), // your own chat UI
               ),
             ),
         ],
@@ -83,15 +95,22 @@ class _CallScreenWithChatState extends State<CallScreenWithChat>
     );
   }
 }
+
+class _ChatButtonListener extends ButtonClickListeners {
+  _ChatButtonListener(this.onChat);
+
+  final VoidCallback onChat;
+
+  @override
+  void onChatButtonClicked() => onChat();
+}
 ```
 
 ## Gotchas
 
 - `hideChatButton` defaults to `true` — you must explicitly set it to `false`
-- The built-in chat uses the session's messaging channel
 - Use `setChatButtonUnreadCount` to show a badge on the chat button
-- For custom chat UI, listen for `onChatButtonClicked` and show your own widget
-- In-call chat messages are separate from regular Chat SDK messages
+- Listen for `onChatButtonClicked` and show your own chat widget; the Calls SDK has no API to send or receive messages
 
 ## Sample App Reference
 

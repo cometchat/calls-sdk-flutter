@@ -47,7 +47,7 @@ final settings = SessionSettingsBuilder()
 ### Listen for Recording Events
 
 ```dart
-class MyMediaListener implements MediaEventListeners {
+class MyMediaListener extends MediaEventListeners {
   @override
   void onRecordingStarted() {
     debugPrint("Recording started");
@@ -59,7 +59,7 @@ class MyMediaListener implements MediaEventListeners {
   }
 }
 
-class MyParticipantListener implements ParticipantEventListeners {
+class MyParticipantListener extends ParticipantEventListeners {
   @override
   void onParticipantStartedRecording(Participant participant) {
     debugPrint("${participant.name} started recording");
@@ -75,16 +75,14 @@ class MyParticipantListener implements ParticipantEventListeners {
 ### Access Recordings via Call Logs
 
 ```dart
-final request = CallLogRequestBuilder()
-  ..hasRecording = true
-  ..build();
+final request = (CallLogRequestBuilder()..hasRecording = true).build();
 
 request.fetchNext(
   onSuccess: (List<CallLog> logs) {
     for (final log in logs) {
       if (log.recordings != null) {
         for (final recording in log.recordings!) {
-          debugPrint("Recording URL: ${recording.url}");
+          debugPrint("Recording URL: ${recording.recordingUrl}");
         }
       }
     }

@@ -1,6 +1,6 @@
 ---
 name: video-controls
-description: Video controls for CometChat Calls SDK v5 Flutter. Camera on/off, switch camera (front/back), pause/resume video. Triggers on "camera", "video", "switch camera", "pause video", "resume video", "front camera", "back camera".
+description: Video controls for CometChat Calls SDK v5 Flutter. Camera on/off, switch camera (front/rear), pause/resume video. Triggers on "camera", "video", "switch camera", "pause video", "resume video", "front camera", "back camera".
 inclusion: manual
 ---
 
@@ -8,7 +8,7 @@ inclusion: manual
 
 ## Overview
 
-Control video during an active call session — pause/resume camera and switch between front/back cameras.
+Control video during an active call session — pause/resume camera and switch between front/rear cameras.
 
 ## Key Imports
 
@@ -41,7 +41,7 @@ bool isPaused = session?.isVideoPaused ?? false;
 ```dart
 final session = CallSession.getInstance();
 
-// Switch between front and back camera
+// Switch between front and rear camera
 await session?.switchCamera();
 
 // Alias method
@@ -52,7 +52,7 @@ await session?.toggleCameraSource();
 
 ```dart
 final settings = SessionSettingsBuilder()
-    .setInitialCameraFacing(CameraFacing.front) // or CameraFacing.back
+    .setInitialCameraFacing(CameraFacing.front) // or CameraFacing.rear
     .startVideoPaused(false)
     .build();
 ```
@@ -60,7 +60,7 @@ final settings = SessionSettingsBuilder()
 ### Listen for Video Events
 
 ```dart
-class MyMediaListener implements MediaEventListeners {
+class MyMediaListener extends MediaEventListeners {
   @override
   void onVideoPaused() {
     debugPrint("Video paused");
@@ -81,14 +81,15 @@ class MyMediaListener implements MediaEventListeners {
 ## CameraFacing Enum
 
 - `CameraFacing.front` — Front-facing camera
-- `CameraFacing.back` — Rear-facing camera
+- `CameraFacing.rear` — Rear-facing camera
 
 ## Gotchas
 
 - Video controls only work during an active session
 - `isVideoPaused` reflects the local video state
 - Camera permission must be granted before starting video
-- `switchCamera()` toggles between front and back — no explicit set
+- `switchCamera()` toggles between front and rear — no explicit set
+- The rear camera is `CameraFacing.rear` (there is no `CameraFacing.back`)
 
 ## Sample App Reference
 

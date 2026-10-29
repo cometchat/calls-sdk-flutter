@@ -38,19 +38,26 @@ request.fetchNext(
 ### With Filters
 
 ```dart
-final request = CallLogRequestBuilder()
-  ..callType = "video"           // "audio" or "video"
-  ..callStatus = "ended"         // "initiated", "ongoing", "ended", "cancelled"
-  ..callDirection = "outgoing"   // "incoming" or "outgoing"
-  ..hasRecording = true          // only logs with recordings
-  ..limit = 20                   // results per page (default 30, max 100)
-  ..uid = "user123"              // filter by specific user
-  ..build();
+final request = (CallLogRequestBuilder()
+      ..callType = "video"           // "audio" or "video"
+      ..callStatus = "ended"         // "initiated", "ongoing", "ended", "cancelled"
+      ..callDirection = "outgoing"   // "incoming" or "outgoing"
+      ..hasRecording = true          // only logs with recordings
+      ..limit = 20                   // results per page (default 30, max 100)
+      ..uid = "user123")             // filter by specific user
+    .build();
 ```
 
 ### Pagination
 
 ```dart
+class CallLogsScreen extends StatefulWidget {
+  const CallLogsScreen({super.key});
+
+  @override
+  State<CallLogsScreen> createState() => _CallLogsScreenState();
+}
+
 class _CallLogsScreenState extends State<CallLogsScreen> {
   final CallLogRequest _request = CallLogRequestBuilder().build();
   final List<CallLog> _logs = [];
@@ -112,14 +119,18 @@ log.sessionId          // String? — unique session identifier
 log.status             // String? — "initiated", "ongoing", "ended", "cancelled"
 log.type               // String? — "audio" or "video"
 log.mode               // String? — call category/mode
-log.direction          // String? — "incoming" or "outgoing"
+log.receiverType       // String? — "user" or "group"
+log.initiatedAt        // int? — timestamp when call was placed
 log.startedAt          // int? — timestamp when call started
 log.endedAt            // int? — timestamp when call ended
 log.totalDurationInMinutes  // double? — call duration
+log.totalDuration      // String? — formatted call duration
+log.totalParticipants  // int?
+log.hasRecording       // bool?
 log.participants       // List<Participant>? — participants in the call
-log.recordings         // List<Recording>? — recordings for this call
-log.initiator          // CallUser? — who initiated the call
-log.receiver           // CallUser? — who received the call
+log.recordings         // List<Recordings>? — recordings (recordingUrl, duration, ...)
+log.initiator          // CallEntity? — a CallUser who placed the call
+log.receiver           // CallEntity? — a CallUser or CallGroup
 ```
 
 ## Gotchas
@@ -129,6 +140,9 @@ log.receiver           // CallUser? — who received the call
 - Returns empty list when no more pages are available
 - `limit` max is 100, default is 30
 - `fetchPrevious()` is also available for backward pagination
+- Build the request with `(CallLogRequestBuilder()..field = value).build()`: a trailing `..build()` in the cascade discards the request and returns the builder
+- `CallLog` has no direction field; filter by direction with `callDirection` on the builder
+- `CometChatCalls.getCallDetails(sessionId, onSuccess:, onError:)` returns the logs for one session
 
 ## Sample App Reference
 

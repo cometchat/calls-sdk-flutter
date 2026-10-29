@@ -49,15 +49,12 @@ await session?.setAudioModeType(AudioMode.earpiece);
 
 // Switch to bluetooth
 await session?.setAudioModeType(AudioMode.bluetooth);
-
-// Switch to headphones
-await session?.setAudioModeType(AudioMode.headphones);
 ```
 
 ### Listen for Audio Events
 
 ```dart
-class MyMediaListener implements MediaEventListeners {
+class MyMediaListener extends MediaEventListeners {
   @override
   void onAudioMuted() {
     debugPrint("Audio muted");
@@ -80,7 +77,6 @@ class MyMediaListener implements MediaEventListeners {
 - `AudioMode.speaker` — Phone speaker
 - `AudioMode.earpiece` — Phone earpiece
 - `AudioMode.bluetooth` — Bluetooth device
-- `AudioMode.headphones` — Wired headphones
 
 ## Gotchas
 

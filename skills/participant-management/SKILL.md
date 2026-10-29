@@ -65,7 +65,7 @@ bool isRaised = session?.isHandRaised ?? false;
 ### Listen for Participant Events
 
 ```dart
-class MyParticipantListener implements ParticipantEventListeners {
+class MyParticipantListener extends ParticipantEventListeners {
   @override
   void onParticipantListChanged(List<Participant> participants) {
     // Full updated participant list
@@ -114,9 +114,15 @@ class MyParticipantListener implements ParticipantEventListeners {
 participant.uid        // String? — user ID
 participant.name       // String? — display name
 participant.avatar     // String? — avatar URL
-participant.isAudioMuted  // bool
-participant.isVideoPaused // bool
-participant.isHandRaised  // bool
+participant.deviceId   // String? — the participant's device
+participant.mid        // String? — the participant's media ID
+participant.state      // String? — participant state
+participant.isJoined   // bool?
+participant.joinedAt   // int?
+participant.leftAt     // int?
+participant.totalAudioMinutes      // double?
+participant.totalVideoMinutes      // double?
+participant.totalDurationInMinutes // double?
 ```
 
 ## Gotchas
@@ -125,6 +131,8 @@ participant.isHandRaised  // bool
 - `muteParticipant` and `pauseParticipantVideo` require appropriate permissions
 - `pinParticipant(null)` can be used to unpin
 - `onParticipantListChanged` fires with the full list on any change
+- `Participant` carries no mute, video or hand-raised flags: track them from the `onParticipantAudioMuted` / `onParticipantVideoPaused` / `onParticipantHandRaised` callbacks (and their opposites)
+- `onParticipantConnected` (5.1) fires for a participant who prepared the session with `connect` but has not joined yet
 - The local user is included in the participant list
 
 ## Sample App Reference

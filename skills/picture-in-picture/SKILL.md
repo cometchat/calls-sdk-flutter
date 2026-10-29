@@ -10,6 +10,8 @@ inclusion: manual
 
 Enable Picture-in-Picture (PiP) mode to show a floating call window when the user navigates away from the call screen.
 
+There are two parts: the **PiP layout** (a compact call layout inside the call view) and **system PiP** (Android's floating window, entered with `enterPipMode()`). From 5.1.0 the Android plugin switches the layout by itself when the activity enters and leaves PiP, so apps only decide when to enter PiP.
+
 ## Key Imports
 
 ```dart
@@ -49,7 +51,7 @@ bool supported = await session?.isPipSupported() ?? false;
 ### Listen for PiP Events
 
 ```dart
-class MyLayoutListener implements LayoutListeners {
+class MyLayoutListener extends LayoutListeners {
   @override
   void onPictureInPictureLayoutEnabled() {
     debugPrint("PiP enabled");
@@ -60,6 +62,11 @@ class MyLayoutListener implements LayoutListeners {
     debugPrint("PiP disabled");
   }
 }
+
+void listenForPip() {
+  // A single listener, set as a property (not add/remove).
+  CallSession.getInstance()?.layoutListener = MyLayoutListener();
+}
 ```
 
 ### Auto-Enter PiP on Background
@@ -67,29 +74,32 @@ class MyLayoutListener implements LayoutListeners {
 ```dart
 @override
 void didChangeAppLifecycleState(AppLifecycleState state) {
-  if (state == AppLifecycleState.paused) {
-    // App going to background — enter PiP
+  // Android: inactive arrives while the activity is still visible, which is
+  // when Android lets an app enter PiP.
+  if (state == AppLifecycleState.inactive) {
     CallSession.getInstance()?.enterPipMode();
   }
 }
 ```
 
+When the window expands again, or the app comes back after the PiP window was closed, the Android plugin restores the full layout and resumes video it paused; there is nothing to undo here.
+
 ## Platform Notes
 
 ### Android
-- Requires `android:supportsPictureInPicture="true"` in AndroidManifest activity
-- Available on Android 8.0+ (API 26+)
+- Requires `android:supportsPictureInPicture="true"` on the activity in AndroidManifest
+- Available on Android 8.0+ (API 26+); `isPipSupported()` reports `false` on low-RAM (Android Go) devices
+- Closing the PiP window keeps the call running with this user's video paused until the app is on screen again
 
 ### iOS
-- PiP is handled via AVKit framework
-- Available on iOS 15+
+- The plugin implements the PiP layout methods (`enablePictureInPictureLayout` / `disablePictureInPictureLayout`) but not system PiP: `isPipSupported()` reports `false` and `enterPipMode()` throws a `CometChatCallsException`
 
 ## Gotchas
 
 - Check `isPipSupported()` before attempting to enter PiP
-- PiP may not be available on all devices (e.g., some tablets)
 - System PiP mode is different from the in-app PiP layout
-- Register `LayoutListeners` to track PiP state changes
+- On Android, `disablePictureInPictureLayout()` also turns off entering PiP for the call (`enterPipMode()` returns `false`) until `enablePictureInPictureLayout()`; don't call it to "restore" the layout, the plugin does that
+- Set `CallSession.getInstance()?.layoutListener` to track PiP state changes
 
 ## Sample App Reference
 

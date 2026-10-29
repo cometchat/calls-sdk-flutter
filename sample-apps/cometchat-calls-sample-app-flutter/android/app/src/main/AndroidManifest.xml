@@ -30,6 +30,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Keeps the call running, with a notification, while the app is in
+             the background. Without it Android stops the microphone and camera
+             when the app goes to the background. Declare only the foreground
+             service types your app can justify on Google Play. -->
+        <service
+            android:name="com.cometchatcalls.cometchatcalls_plugin.services.OngoingCallService"
+            android:exported="false"
+            android:foregroundServiceType="microphone|camera" />
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

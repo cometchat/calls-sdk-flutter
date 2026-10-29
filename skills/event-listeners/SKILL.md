@@ -8,7 +8,9 @@ inclusion: manual
 
 ## Overview
 
-The SDK provides 5 focused listener protocols for different event categories. Register them on `CallSession.getInstance()` after joining a session.
+The SDK provides 5 focused listener classes for different event categories. Register them on `CallSession.getInstance()`. Each class has empty default implementations: extend it and override only what you need.
+
+Incoming ringing calls use a separate `IncomingCallListener`, registered on `CometChatCalls` (see below).
 
 ## Key Imports
 
@@ -23,7 +25,12 @@ import 'package:cometchat_calls_sdk/cometchat_calls_sdk.dart';
 Session lifecycle and connection events:
 
 ```dart
-class MySessionListener implements SessionStatusListeners {
+class MySessionListener extends SessionStatusListeners {
+  // 5.1: a session prepared with CometChatCalls.connect (or initiateCall)
+  // is connected and ready to be joined. Not called for a direct join.
+  @override
+  void onConnected() {}
+
   @override
   void onSessionJoined() {}
 
@@ -49,9 +56,14 @@ class MySessionListener implements SessionStatusListeners {
 Participant join/leave and state changes:
 
 ```dart
-class MyParticipantListener implements ParticipantEventListeners {
+class MyParticipantListener extends ParticipantEventListeners {
   @override
   void onParticipantListChanged(List<Participant> participants) {}
+
+  // 5.1: a participant connected with CometChatCalls.connect but has not
+  // joined yet. For a ringing call, the callee's device has the call.
+  @override
+  void onParticipantConnected(Participant participant) {}
 
   @override
   void onParticipantJoined(Participant participant) {}
@@ -99,7 +111,7 @@ class MyParticipantListener implements ParticipantEventListeners {
 Local media state changes:
 
 ```dart
-class MyMediaListener implements MediaEventListeners {
+class MyMediaListener extends MediaEventListeners {
   @override
   void onRecordingStarted() {}
 
@@ -137,7 +149,7 @@ class MyMediaListener implements MediaEventListeners {
 UI button interaction events:
 
 ```dart
-class MyButtonListener implements ButtonClickListeners {
+class MyButtonListener extends ButtonClickListeners {
   @override
   void onLeaveSessionButtonClicked() {}
 
@@ -175,7 +187,7 @@ class MyButtonListener implements ButtonClickListeners {
 Layout change events:
 
 ```dart
-class MyLayoutListener implements LayoutListeners {
+class MyLayoutListener extends LayoutListeners {
   @override
   void onCallLayoutChanged(LayoutType layoutType) {}
 
@@ -193,9 +205,28 @@ class MyLayoutListener implements LayoutListeners {
 }
 ```
 
+### 6. IncomingCallListener (5.1, Android and iOS)
+
+Ringing calls handed to the SDK with `CometChatCalls.injectIncomingCall` (see the `ringing-integration` and `voip-calling` skills):
+
+```dart
+class MyIncomingCallListener extends IncomingCallListener {
+  @override
+  void onIncomingCallReceived(InitiatedCall call) {}
+
+  @override
+  void onIncomingCallEnded(InitiatedCall call, String reason) {}
+}
+
+void registerIncomingCallListener() {
+  CometChatCalls.addIncomingCallListener("my_listener", MyIncomingCallListener());
+  // Later: CometChatCalls.removeIncomingCallListener("my_listener");
+}
+```
+
 ## Registration
 
-Register listeners after joining a session:
+Register listeners in the `onSuccess` callback of `joinSession`, or before `connect` / `initiateCall` to receive `onConnected` and `onParticipantConnected`:
 
 ```dart
 CometChatCalls.joinSession(
@@ -231,10 +262,11 @@ session?.clearAllListeners();
 
 ## Gotchas
 
-- Register listeners in the `onSuccess` callback of `joinSession`
-- A class can implement multiple listener interfaces
+- Register listeners in the `onSuccess` callback of `joinSession`, or before `connect` / `initiateCall` for the pre-join events
+- Use `extends`, not `implements`: with `implements` you must write every callback, including ones added in later releases (5.1 added `onConnected` and `onParticipantConnected`)
+- A class can extend only one listener class; use one object per category
 - `LayoutListeners` uses a setter (single listener), not add/remove
-- All listener methods have default empty implementations — override only what you need
+- `CallSession` is a singleton and listeners stay registered after the call ends: remove them when your call screen closes
 - Use `setState()` for UI updates from listener callbacks
 
 ## Sample App Reference
