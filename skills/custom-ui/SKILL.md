@@ -38,11 +38,13 @@ class CustomCallScreen extends StatefulWidget {
   State<CustomCallScreen> createState() => _CustomCallScreenState();
 }
 
-class _CustomCallScreenState extends State<CustomCallScreen>
-    implements SessionStatusListeners {
+class _CustomCallScreenState extends State<CustomCallScreen> {
   Widget? _callWidget;
   bool _isMuted = false;
   bool _isVideoOff = false;
+  late final _statusListener = _CallEndedListener(() {
+    if (mounted) Navigator.pop(context);
+  });
 
   @override
   void initState() {
@@ -59,12 +61,18 @@ class _CustomCallScreenState extends State<CustomCallScreen>
     CometChatCalls.joinSession(
       sessionId: widget.sessionId,
       sessionSettings: settings,
-      onSuccess: (Widget? widget) {
-        setState(() => _callWidget = widget);
-        CallSession.getInstance()?.addSessionStatusListener(this);
+      onSuccess: (Widget? callWidget) {
+        setState(() => _callWidget = callWidget);
+        CallSession.getInstance()?.addSessionStatusListener(_statusListener);
       },
-      onError: (e) => Navigator.pop(context),
+      onError: (CometChatCallsException e) => Navigator.pop(context),
     );
+  }
+
+  @override
+  void dispose() {
+    CallSession.getInstance()?.removeSessionStatusListener(_statusListener);
+    super.dispose();
   }
 
   @override
@@ -124,19 +132,21 @@ class _CustomCallScreenState extends State<CustomCallScreen>
   }
 
   void _endCall() async {
-    await CallSession.getInstance()?.leaveSession();
-    if (mounted) Navigator.pop(context);
+    // leave() fires onSessionLeft, which closes the screen.
+    await CallSession.getInstance()?.leave();
   }
+}
+
+class _CallEndedListener extends SessionStatusListeners {
+  _CallEndedListener(this.onEnded);
+
+  final VoidCallback onEnded;
 
   @override
-  void onSessionLeft() {
-    if (mounted) Navigator.pop(context);
-  }
+  void onSessionLeft() => onEnded();
 
   @override
-  void onConnectionClosed() {
-    if (mounted) Navigator.pop(context);
-  }
+  void onConnectionClosed() => onEnded();
 }
 ```
 
@@ -163,6 +173,7 @@ final settings = SessionSettingsBuilder()
 - Use `Stack` to overlay custom controls on top of the call widget
 - `CallSession` methods work regardless of whether the default UI is visible
 - Always handle `onSessionLeft` and `onConnectionClosed` to clean up
+- Leave with `CallSession.leave()`; `leaveSession()` is deprecated since 5.1.0
 - Custom UI state (muted, video off) should be synced with `CallSession` state
 
 ## Sample App Reference

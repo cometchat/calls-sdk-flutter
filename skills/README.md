@@ -20,7 +20,7 @@ cp -r skills/ /path/to/your/project/skills/
 |-------|-------------|
 | `setup` | SDK dependency, CallAppSettings, CometChatCalls.init, permissions |
 | `join-session` | CometChatCalls.joinSession, SessionSettingsBuilder, Widget container |
-| `ringing-integration` | Dual SDK (Chat + Calls), initiateCall, accept/reject/cancel, incoming/outgoing |
+| `ringing-integration` | initiateCall, connect while ringing, joinSession to answer, endCall to decline/cancel, IncomingCallListener |
 | `session-settings` | All SessionSettingsBuilder options: layouts, session type, audio mode, hide buttons |
 | `event-listeners` | SessionStatusListeners, ParticipantEventListeners, MediaEventListeners, ButtonClickListeners, LayoutListeners |
 | `call-logs` | CallLogRequest, fetching and displaying call history |
@@ -38,8 +38,8 @@ cp -r skills/ /path/to/your/project/skills/
 | `recording` | Auto-start recording, recording events |
 | `screen-sharing` | Screen share viewing, presenter status |
 | `picture-in-picture` | PiP mode configuration |
-| `background-handling` | Background modes, OngoingCallService, keeping calls alive |
-| `voip-calling` | VoIP push notifications, CallKit (iOS), ConnectionService (Android) |
+| `background-handling` | Background modes, OngoingCallService declaration, CometChatOngoingCallService, keeping calls alive |
+| `voip-calling` | VoIP push notifications, injectIncomingCall, CallKit audio (iOS), killed-state ringing |
 | `audio-controls` | Mute/unmute, audio mode switching |
 | `video-controls` | Camera on/off, switch camera |
 | `participant-management` | Participant list, mute/kick, raise hand |
@@ -52,9 +52,10 @@ Each skill has a `description` field in its YAML frontmatter that lists trigger 
 
 ## Compatibility
 
-- CometChat Calls SDK v5 (5.0.4+)
-- CometChat Chat SDK v4 (4.0.+) — required for ringing and VoIP
-- Dart 3.0+, Flutter 3.10+
-- Android minSdk 26, iOS 15.1+
+- CometChat Calls SDK v5 (5.1.0+)
+- The Chat SDK is not required: from 5.1 the Calls SDK rings calls itself. Apps that also use the Chat SDK v4 on iOS need `CometChatSDK` 4.1.3+
+- Flutter 3.44+ (Swift Package Manager on by default), Dart 3.2+
+- Android minSdk 26, Android Gradle Plugin 8.9.1+
+- iOS 15.1+, Swift Package Manager only (on by default from Flutter 3.44)
 - Available on pub.dev: https://pub.dev/packages/cometchat_calls_sdk
 - Works with: Kiro, Claude Code, Cursor, Copilot, and other AI coding assistants that support the skills ecosystem

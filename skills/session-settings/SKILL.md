@@ -26,6 +26,7 @@ final settings = SessionSettingsBuilder()
 
     // Session type
     .setType(SessionType.video)          // SessionType.audio or SessionType.video
+    .setPeerCall(false)                  // true for 1:1 calls (5.1)
 
     // Audio/Video start state
     .startVideoPaused(false)
@@ -35,10 +36,10 @@ final settings = SessionSettingsBuilder()
     .setLayout(LayoutType.tile)          // LayoutType.tile, .sidebar, .spotlight
 
     // Audio mode
-    .setAudioMode(AudioMode.speaker)     // AudioMode.speaker, .earpiece, .bluetooth, .headphones
+    .setAudioMode(AudioMode.speaker)     // AudioMode.speaker, .earpiece, .bluetooth
 
     // Camera
-    .setInitialCameraFacing(CameraFacing.front) // CameraFacing.front or .back
+    .setInitialCameraFacing(CameraFacing.front) // CameraFacing.front or .rear
 
     // Idle timeout (seconds)
     .setIdleTimeoutPeriod(300)
@@ -46,8 +47,10 @@ final settings = SessionSettingsBuilder()
     // Low bandwidth mode
     .enableLowBandwidthMode(false)
 
-    // Recording
+    // Recording and transcription
     .enableAutoStartRecording(false)
+    .enableAutoStartTranscription(false)
+    .setCaptionLanguage("en-US")
 
     // Hide UI elements
     .hideControlPanel(false)
@@ -65,6 +68,8 @@ final settings = SessionSettingsBuilder()
     .hideChangeLayoutButton(false)
     .hideChatButton(true)
     .hideSessionTimer(false)
+    .hideClosedCaptionButton(true)
+    .hideTranscriptionButton(true)
 
     .build();
 ```
@@ -102,6 +107,15 @@ final settings = SessionSettingsBuilder()
     .build();
 ```
 
+### 1:1 Call (5.1)
+
+```dart
+final settings = SessionSettingsBuilder()
+    .setType(SessionType.video)
+    .setPeerCall(true) // when one participant leaves, the session ends for both
+    .build();
+```
+
 ### Webinar / Presenter Mode
 
 ```dart
@@ -128,19 +142,21 @@ final settings = SessionSettingsBuilder()
 - `AudioMode.speaker` — Speaker output (default)
 - `AudioMode.earpiece` — Earpiece output
 - `AudioMode.bluetooth` — Bluetooth output
-- `AudioMode.headphones` — Wired headphones
 
 ### CameraFacing
 - `CameraFacing.front` — Front camera (default)
-- `CameraFacing.back` — Rear camera
+- `CameraFacing.rear` — Rear camera
 
 ## Gotchas
 
 - `idleTimeoutPeriod` is in seconds (default 300 = 5 minutes)
 - `hideShareInviteButton` and `hideRecordingButton` default to `true`
-- `hideChatButton` defaults to `true`
+- `hideChatButton`, `hideClosedCaptionButton` and `hideTranscriptionButton` default to `true`
 - All other hide options default to `false`
+- `setCaptionLanguage` defaults to `"en-US"`
 - `enableAutoStartRecording(true)` starts recording when the session begins
+- `setPeerCall` defaults to `false`; set it to `true` for 1:1 calls
+- Settings are frozen when a session is prepared (`connect`, or `InitiateCallOptions.sessionSettings` for `initiateCall`): the `sessionSettings` passed to the `joinSession` that takes the prepared session over are not used
 
 ## Sample App Reference
 

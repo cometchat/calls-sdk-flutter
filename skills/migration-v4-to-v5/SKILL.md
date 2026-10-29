@@ -16,7 +16,7 @@ The v5 SDK introduces a new API surface while maintaining backward compatibility
 |--------|--------|
 | `CometChatCalls.generateToken(sessionId, authToken)` | `CometChatCalls.generateCallToken(sessionId)` |
 | `CometChatCalls.startSession(token, callSettings)` | `CometChatCalls.joinSession(callToken: token, sessionSettings: settings)` |
-| `CometChatCalls.endSession()` | `CallSession.getInstance()?.leaveSession()` |
+| `CometChatCalls.endSession()` | `CallSession.getInstance()?.leave()` |
 | `CallSettings` / `CallSettingsBuilder` | `SessionSettings` / `SessionSettingsBuilder` |
 | `CometChatCallsEventsListener` (single mixin) | 5 focused listeners |
 | Auth token passed manually | Auth token managed internally after `login()` |
@@ -51,9 +51,9 @@ CometChatCalls.generateCallToken(sessionId,
 
 ### v4
 ```dart
-final callSettings = CallSettingsBuilder()
-  ..listener = myV4Listener
-  ..build();
+final callSettings = (CallSettingsBuilder()
+      ..listener = myV4Listener)
+    .build();
 
 CometChatCalls.startSession(tokenString, callSettings,
   onSuccess: (Widget? widget) { ... },
@@ -101,7 +101,7 @@ class MyListener with CometChatCallsEventsListener {
 
 ### v5 (Focused Listeners)
 ```dart
-class MySessionListener implements SessionStatusListeners {
+class MySessionListener extends SessionStatusListeners {
   @override
   void onSessionJoined() {}
   @override
@@ -110,19 +110,19 @@ class MySessionListener implements SessionStatusListeners {
   void onConnectionClosed() {}
 }
 
-class MyParticipantListener implements ParticipantEventListeners {
+class MyParticipantListener extends ParticipantEventListeners {
   @override
   void onParticipantJoined(Participant participant) {}
   @override
   void onParticipantLeft(Participant participant) {}
 }
 
-class MyMediaListener implements MediaEventListeners {
+class MyMediaListener extends MediaEventListeners {
   @override
   void onAudioModeChanged(AudioMode audioMode) {}
 }
 
-class MyButtonListener implements ButtonClickListeners {
+class MyButtonListener extends ButtonClickListeners {
   @override
   void onLeaveSessionButtonClicked() {}
 }
@@ -132,9 +132,10 @@ class MyButtonListener implements ButtonClickListeners {
 
 ### v4
 ```dart
-final settings = CallSettingsBuilder()
-  ..setType("VIDEO")
-  ..build();
+final settings = (CallSettingsBuilder()
+      ..setAudioOnlyCall = false
+      ..enableDefaultLayout = true)
+    .build();
 ```
 
 ### v5
@@ -158,16 +159,16 @@ CometChatCalls.endSession(
 
 ### v5
 ```dart
-await CallSession.getInstance()?.leaveSession();
+await CallSession.getInstance()?.leave();
 ```
 
 ## Call Logs
 
 ### v4
 ```dart
-final builder = CallLogRequestBuilder()
-  ..authToken = authToken  // manually set
-  ..build();
+final request = (CallLogRequestBuilder()
+      ..authToken = authToken) // manually set
+    .build();
 ```
 
 ### v5
@@ -185,15 +186,39 @@ request.fetchNext(
 The v5 SDK includes deprecated v4 APIs that still work:
 - `CometChatCalls.generateToken()` — calls `generateCallToken` internally
 - `CometChatCalls.startSession()` — calls `joinSession` internally
-- `CometChatCalls.endSession()` — calls `leaveSession` internally
+- `CometChatCalls.endSession()` — calls `CallSession.leave()` internally
 - `CallSettings` / `CallSettingsBuilder` — converts to `SessionSettings`
 - `CometChatCallsEventsListener` — bridged via `V4EventListenerAdapter`
 
 These deprecated APIs will be removed in a future release.
 
+## Upgrading from 5.0.x to 5.1
+
+| 5.0.x | 5.1 |
+|-------|-----|
+| `CallSession.getInstance()?.leaveSession()` | `CallSession.getInstance()?.leave()` (`leaveSession()` deprecated) |
+| `CallSession.getInstance()?.isCallSessionActive()` | `await CallSession.getInstance()?.isSessionActive()` (deprecated) |
+| `CometChatCalls.connect(... onSuccess: (String status) {...})` | `onSuccess: (CallSession session) {...}`; the old status is `await session.getPrepareStatus()` |
+| `CometChatCalls.endCall(... onSuccess: (EndedCall call) {...})` | `onSuccess: () {...}`; `EndedCall` is removed |
+| Ringing through the Chat SDK | `CometChatCalls.initiateCall` / `endCall` / `IncomingCallListener` (see `ringing-integration`) |
+
+Build changes:
+
+- **iOS builds with Swift Package Manager only.** Swift Package Manager is on by default from Flutter 3.44; otherwise run `flutter config --enable-swift-package-manager`. No Podfile or `pod install` step for the Calls SDK.
+- **Android apps declare the ongoing call service** inside `<application>`; without it the microphone and camera stop in the background:
+
+```xml
+<service
+    android:name="com.cometchatcalls.cometchatcalls_plugin.services.OngoingCallService"
+    android:exported="false"
+    android:foregroundServiceType="microphone|camera" />
+```
+
+- **Android Gradle Plugin 8.9.1 or later** (through `connectivity_plus` 7).
+
 ## Gotchas
 
-- v4 deprecated APIs still work but log deprecation warnings
+- v4 deprecated APIs still work but are marked `@Deprecated`, so the analyzer warns on them
 - `login()` or `loginWithAuthToken()` must be called before using v5 APIs
 - v4's `RTCUser` is replaced by `Participant` in v5
 - v4's `GenerateToken` is replaced by `CallToken` in v5

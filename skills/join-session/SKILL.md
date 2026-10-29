@@ -13,7 +13,7 @@ Join a call session using `CometChatCalls.joinSession()`. Returns a `Widget` tha
 ## Prerequisites
 
 - Calls SDK initialized and user logged in
-- A valid session ID (from Chat SDK's `Call.sessionId` or your backend)
+- A valid session ID (from `CometChatCalls.initiateCall`, an incoming call's `InitiatedCall.sessionId`, or your backend)
 
 ## Key Imports
 
@@ -101,6 +101,22 @@ CometChatCalls.joinSession(
 );
 ```
 
+### Prepare a Session Before Joining (5.1)
+
+`CometChatCalls.connect` prepares a session without joining it: signalling only, no media or UI. A later `joinSession` with the same session ID takes the prepared session over, so the join is near-instant. Ringing calls use this while the call rings (see the `ringing-integration` skill).
+
+```dart
+CometChatCalls.connect(
+  sessionId: sessionId,
+  sessionSettings: SessionSettingsBuilder().setPeerCall(true).build(),
+  onSuccess: (CallSession session) async {
+    final status = await session.getPrepareStatus(); // see PrepareStatus
+    debugPrint("Prepare status: $status");
+  },
+  onError: (CometChatCallsException e) => debugPrint("Connect failed: ${e.message}"),
+);
+```
+
 ### Full Call Screen Example
 
 ```dart
@@ -112,9 +128,11 @@ class CallScreen extends StatefulWidget {
   State<CallScreen> createState() => _CallScreenState();
 }
 
-class _CallScreenState extends State<CallScreen>
-    implements SessionStatusListeners, ButtonClickListeners {
+class _CallScreenState extends State<CallScreen> {
   Widget? _callWidget;
+  late final _statusListener = _CallStatusListener(onEnded: () {
+    if (mounted) Navigator.pop(context);
+  });
 
   @override
   void initState() {
@@ -134,26 +152,19 @@ class _CallScreenState extends State<CallScreen>
       sessionSettings: settings,
       onSuccess: (Widget? callWidget) {
         setState(() => _callWidget = callWidget);
-        final session = CallSession.getInstance();
-        session?.addSessionStatusListener(this);
-        session?.addButtonClickListener(this);
+        CallSession.getInstance()?.addSessionStatusListener(_statusListener);
       },
-      onError: (e) {
+      onError: (CometChatCallsException e) {
         debugPrint("Join failed: ${e.message}");
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       },
     );
   }
 
   @override
-  void onSessionLeft() => Navigator.pop(context);
-
-  @override
-  void onConnectionClosed() => Navigator.pop(context);
-
-  @override
-  void onLeaveSessionButtonClicked() {
-    CallSession.getInstance()?.leaveSession();
+  void dispose() {
+    CallSession.getInstance()?.removeSessionStatusListener(_statusListener);
+    super.dispose();
   }
 
   @override
@@ -163,11 +174,28 @@ class _CallScreenState extends State<CallScreen>
     );
   }
 }
+
+class _CallStatusListener extends SessionStatusListeners {
+  _CallStatusListener({required this.onEnded});
+
+  final VoidCallback onEnded;
+
+  @override
+  void onSessionLeft() => onEnded();
+
+  @override
+  void onConnectionClosed() => onEnded();
+}
 ```
+
+The built-in leave button ends the session and fires `onSessionLeft`. To leave from your own control, call `CallSession.getInstance()?.leave()`.
 
 ## Gotchas
 
-- `joinSession` returns a `Widget?` — embed it in your widget tree
+- `joinSession` returns a `Widget?` — embed it in your widget tree, and keep it mounted until the call ends: the view holds the running call, and removing it ends it
+- A session prepared with `connect()` or `initiateCall()` keeps the settings it was prepared with; the `sessionSettings` passed to the join that takes it over are not used
+- Leave with `CallSession.getInstance()?.leave()`; `leaveSession()` is deprecated since 5.1.0
+- Extend the listener classes (`extends SessionStatusListeners`) and override only what you need; `implements` forces you to write every callback
 - Provide exactly one of `sessionId` or `callToken`, not both
 - All participants must use the same session ID to join the same call
 - Call `joinSession` only after SDK is initialized and user is logged in
